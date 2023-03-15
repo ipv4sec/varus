@@ -44,10 +44,25 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
           decoration: BoxDecoration(color: Colors.deepOrange),
-        )
+        ),
+           ListTile(
+             leading: Icon(Icons.settings),
+             title: Text('Configure'),
+             onTap: () {
+               Navigator.pushNamed(context, "/configure");
+             },
+           ),
+           ListTile(
+             leading: Icon(Icons.ac_unit),
+             title: Text('Copyright'),
+             onTap: () {
+               Navigator.pushNamed(context, "/copyright");
+             },
+           ),
       ])),
       appBar: AppBar(
-        title: Center(child: Text("OTP")),
+        centerTitle: true,
+        title: Text("OTP"),
         elevation: 50,
       ),
       body: StreamBuilder<List<Varus>>(
