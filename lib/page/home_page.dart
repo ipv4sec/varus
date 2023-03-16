@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:varus/dao/varus_dao.dart';
 import 'package:varus/service/varus_service.dart';
 
@@ -37,13 +38,13 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.only(top: 100.0),
             child: Row(
               children: [
-                Text("OTP", style: TextStyle(color: Colors.white, fontSize: 18.0),),
+                Text("OTP", style: TextStyle(color: Theme.of(context).scaffoldBackgroundColor, fontSize: 18.0),),
                 SizedBox(width: 10.0,),
                 Text("v0.1.0", style: TextStyle(color: Colors.white),),
               ],
             ),
           ),
-          decoration: BoxDecoration(color: Colors.deepOrange),
+          decoration: BoxDecoration(color: Theme.of(context).primaryColor),
         ),
            ListTile(
              leading: Icon(Icons.settings),
@@ -84,6 +85,11 @@ class _HomePageState extends State<HomePage> {
                   Icons.account_tree,
                   color: Colors.white,
                 )),
+                // trailing: CircleAvatar(
+                //     child: Icon(
+                //       Icons.account_tree,
+                //       color: Colors.white,
+                //     )),
                 title: Text("Name: ${snapshot.data?[index].name}"),
                 subtitle:
                     Text("Description: ${snapshot.data?[index].description}"),
@@ -92,6 +98,9 @@ class _HomePageState extends State<HomePage> {
                       .deleteVarus(snapshot.data![index].id!);
                   vs = await VarusService.instance.queryAllVarus();
                   _streamController.sink.add(vs);
+                  Fluttertoast.showToast(
+                    backgroundColor: Colors.black54,
+                      msg: 'removed :${snapshot.data![index].id!}');
                 },
               );
             },

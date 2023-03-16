@@ -1,3 +1,4 @@
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:varus/page/configure_page.dart';
 import 'package:varus/page/copyright_page.dart';
@@ -12,11 +13,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var theme = FlexThemeData.light(
+      fontFamily: "Montserrat",
+        useMaterial3: false,
+        scheme: FlexScheme.materialBaseline);
+
     return MaterialApp(
-      theme: ThemeData(
-          fontFamily: "Montserrat",
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepOrange),
-          useMaterial3: false),
+      theme: theme,
       title: 'varus',
       initialRoute: "/",
       routes: {
