@@ -152,12 +152,12 @@ class _HomePageState extends State<HomePage> {
             icon: const Icon(Icons.format_size),
           ),
           ActionButton(
-            onPressed: () => {
-              // ImagePicker picker = ImagePicker();
-              // // Pick an image
-              // final XFile? image = await picker.pickImage(
-              // source: ImageSource.gallery,
-              // );
+            onPressed: () async {
+              ImagePicker picker = ImagePicker();
+              XFile? image = await picker.pickImage(
+              source: ImageSource.gallery,
+              );
+              print(image);
               // if (image != null) {
               // if (await controller.analyzeImage(image.path)) {
               // if (!mounted) return;
