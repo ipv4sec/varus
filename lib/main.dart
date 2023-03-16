@@ -1,7 +1,9 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
-import 'package:varus/page/configure_page.dart';
-import 'package:varus/page/copyright_page.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
+
+import 'package:varus/page/about_page.dart';
+import 'package:varus/page/append_page.dart';
+import 'package:varus/page/debug_page.dart';
 import 'package:varus/page/home_page.dart';
 
 void main() {
@@ -14,23 +16,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var theme = FlexThemeData.light(
-      fontFamily: "Montserrat",
+        fontFamily: "Montserrat",
         useMaterial3: false,
         scheme: FlexScheme.materialBaseline);
 
     return MaterialApp(
       theme: theme,
-      title: 'varus',
+      title: 'OTP',
       initialRoute: "/",
       routes: {
-        "/": (_)=> HomePage(),
-        "/configure": (_)=> ConfigurePage(),
-        "/copyright": (_)=> CopyrightPage(),
+        "/": (_) => HomePage(),
+        "/debug": (_) => DebugPage(),
+        "/about": (_) => AboutPage(),
+        "/append": (_) => AppendPage(),
       },
-      // home: HomePage(),
     );
   }
 }
-
-
-

@@ -2,22 +2,17 @@ import 'package:sqflite/sqflite.dart';
 
 class DatabaseUtils {
   static final DatabaseUtils instance = DatabaseUtils._instance();
-  static Database? _db;
+  static Database? _database;
 
   DatabaseUtils._instance();
 
-  Future<Database> get db async {
-    if (_db == null) {
-      _db = await _initDb();
-    }
-    return _db!;
+  Future<Database> get database async {
+    return _database ?? await _init();
   }
 
-  Future<Database> _initDb() async {
+  Future<Database> _init() async {
     String dbPath = '${await getDatabasesPath()}/varus.sqlite';
-    // print(dbPath);
-    Database db = await openDatabase(dbPath, version: 1, onCreate: _createDb);
-    return db;
+    return await openDatabase(dbPath, version: 1, onCreate: _createDb);
   }
 
   void _createDb(Database db, int version) async {

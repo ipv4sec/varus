@@ -1,4 +1,4 @@
-import 'package:varus/utils/database.dart';
+import 'package:varus/utils/database_utils.dart';
 
 class Varus {
   int? id;
@@ -29,36 +29,27 @@ class Varus {
 
 class VarusDao {
   static final VarusDao instance = VarusDao._instance();
+  var tableName = 't_varus';
 
   VarusDao._instance();
 
   Future<List<Varus>> queryAllVarus() async {
-    var client = await DatabaseUtils.instance.db;
-    final List<Map<String, dynamic>> results = await client.query('t_varus');
+    var database = await DatabaseUtils.instance.database;
+    final List<Map<String, dynamic>> ms = await database.query(tableName);
     final List<Varus> vs = [];
-    results.forEach((map) {
-      vs.add(Varus.fromMap(map));
-    });
+    for (var i = 0; i < ms.length; i++) {
+      vs.add(Varus.fromMap(ms[i]));
+    }
     return vs;
   }
 
   Future<int> createVarus(Varus varus) async {
-    var client = await DatabaseUtils.instance.db;
-    return client.insert(
-      't_varus',
-      varus.toMap(),
-    );
+    var database = await DatabaseUtils.instance.database;
+    return database.insert(tableName, varus.toMap());
   }
 
-  Future<int> deleteVarus(Varus varus) async {
-    var client = await DatabaseUtils.instance.db;
-    int affected = await client.delete('t_varus', where: 'id = ?', whereArgs: [varus.id]);
-    return affected;
+  Future<int> deleteVarus(int id) async {
+    var database = await DatabaseUtils.instance.database;
+    return await database.delete(tableName, where: 'id = ?', whereArgs: [id]);
   }
-
-  // Future<int> updateVarus(Varus varus) async {
-  //   var client = await DatabaseUtils.instance.db;
-  //   int affected = await client.update('t_varus', varus.toMap(), where: 'id = ?', whereArgs: [varus.id]);
-  //   return affected;
-  // }
 }

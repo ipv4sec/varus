@@ -14,6 +14,6 @@ class VarusService {
   }
 
   Future<bool> deleteVarus(int id) async {
-    return 1 == await VarusDao.instance.deleteVarus(Varus(id: id, name: "", value: "", description: ""));
+    return 1 == await VarusDao.instance.deleteVarus(id);
   }
 }
