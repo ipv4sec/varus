@@ -21,6 +21,7 @@ class _ConfigurePageState extends State<ConfigurePage> {
   void initState() {
     super.initState();
     cameraController = MobileScannerController(
+      returnImage: true,
         detectionSpeed: DetectionSpeed.noDuplicates);
   }
 
