@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'package:varus/widgets/customized_appbar.dart';
 
-class SettingPage extends StatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+class ScanPage extends StatefulWidget {
+  const ScanPage({Key? key}) : super(key: key);
 
   @override
-  State<SettingPage> createState() => _SettingPageState();
+  State<ScanPage> createState() => _ScanPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _ScanPageState extends State<ScanPage> {
   MobileScannerController? cameraController;
 
   @override
@@ -78,7 +79,54 @@ class _SettingPageState extends State<SettingPage> {
 
         },
       ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          FloatingActionButton.extended(
+            heroTag: "1",
+            onPressed: () async {
+              final ImagePicker _picker = ImagePicker();
+              // Pick an image
+              final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+              print(image);
+              Navigator.pushNamed(context, "/append");
+              // Navigator.of(context).pushNamed();
+            },
+            backgroundColor: Colors.teal,
+            icon: const Icon(Icons.photo_library_outlined),
+            label: const Text("图库图片"),
+          ),
+          SizedBox(
+            height: 20.0,
+          ),
+          FloatingActionButton.extended(
+            heroTag: "2",
+            onPressed: () {
+              // VarusDao.instance.createVarus(Varus(name: "name", value: "value", description: "description"));
+              // var vs = await VarusDao.instance.queryAllVarus();
+              // print(vs.toString());
+              // var varus =
+              //     Varus(name: "name", value: "value", description: "description");
+              // var id = await VarusService.instance.createVarus(varus);
+              // varus.id = id;
+              // vs.add(varus);
+              // _streamController.sink.add(vs);
+              Navigator.pushNamed(context, "/append");
+              // Navigator.of(context).pushNamed();
+            },
+            backgroundColor: Colors.teal,
+            icon: const Icon(Icons.add_card_sharp),
+            label: const Text("手动添加"),
+          )
+        ]
+    ),
     );
+  }
+  @override
+  void dispose() {
+    cameraController?.stop();
+    super.dispose();
   }
 }
 

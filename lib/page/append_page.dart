@@ -31,7 +31,7 @@ class _AppendPageState extends State<AppendPage> {
             TextField(
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.water_drop_outlined),
-                labelText: "value",
+                labelText: "secret",
               ),
             ),
             TextField(
@@ -39,7 +39,8 @@ class _AppendPageState extends State<AppendPage> {
                 prefixIcon: Icon(Icons.add_chart_sharp),
                 labelText: "description",
               ),
-            )
+            ),
+            // ElevatedButton(child: Text('扫描二维码'), onPressed: (){}),
           ],
         ),
       ),
@@ -49,7 +50,7 @@ class _AppendPageState extends State<AppendPage> {
           // var vs = await VarusService.instance.queryAllVarus();
           // print(vs.toString());
           var varus =
-              Varus(name: "name", value: "value", description: "description");
+              Varus(name: "name", secret: "secret", description: "description");
           // var id =
           await VarusService.instance.createVarus(varus);
           // varus.id = id;

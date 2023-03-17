@@ -3,16 +3,16 @@ import 'package:varus/utils/database_utils.dart';
 class Varus {
   int? id;
   String name;
-  String value;
+  String secret;
   String description;
 
-  Varus({this.id, required this.name, required this.value, required this.description});
+  Varus({this.id, required this.name, required this.secret, required this.description});
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'value': value,
+      'secret': secret,
       'description': description,
     };
   }
@@ -20,7 +20,7 @@ class Varus {
     return Varus(
       id: map['id'],
       name: map['name'],
-      value: map['value'],
+      secret: map['secret'],
       description: map['description'],
     );
   }

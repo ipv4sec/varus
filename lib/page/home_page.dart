@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
-// import 'package:image_picker/image_picker.dart';
 import 'package:varus/dao/varus_dao.dart';
 import 'package:varus/service/varus_service.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
@@ -60,9 +59,6 @@ class _HomePageState extends State<HomePage> {
                   onDismissed: (direction) {
                     vs.removeAt(index);
                     _streamController.sink.add(vs);
-                    // 展示一个 snackbar！(Then show a snackbar!)
-                    // Scaffold.of(context)
-                    //     .showSnackBar(SnackBar(content: Text("$item dismissed")));
                   },
                   key: Key(vs[index].id.toString()),
                   child: ListTile(
@@ -101,12 +97,12 @@ class _HomePageState extends State<HomePage> {
           // varus.id = id;
           // vs.add(varus);
           // _streamController.sink.add(vs);
-          Navigator.pushNamed(context, "/append");
+          Navigator.pushNamed(context, "/camera");
           // Navigator.of(context).pushNamed();
         },
         backgroundColor: Colors.teal,
-        icon: const Icon(Icons.add_card_sharp),
-        label: const Text("Append"),
+        icon: const Icon(Icons.add_box_sharp),
+        label: const Text("添加条目"),
       ),
     );
   }

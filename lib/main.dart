@@ -5,9 +5,20 @@ import 'package:varus/page/about_page.dart';
 import 'package:varus/page/append_page.dart';
 import 'package:varus/page/debug_page.dart';
 import 'package:varus/page/home_page.dart';
+import 'package:varus/page/scan_page.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'package:flutter/widgets.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
+
+Future<void> main() async {
+  await SentryFlutter.init(
+        (options) {
+      options.dsn =
+      'https://ef68d0f454ce4fe4a0b92e00e349224b@o4504851599720448.ingest.sentry.io/4504851603849216';
+      options.tracesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(MyApp()),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -28,6 +39,7 @@ class MyApp extends StatelessWidget {
         "/": (_) => HomePage(),
         "/debug": (_) => DebugPage(),
         "/about": (_) => AboutPage(),
+        "/camera": (_) => ScanPage(),
         "/append": (_) => AppendPage(),
       },
     );

@@ -41,6 +41,7 @@ dependencies:
   flex_color_scheme: ^6.1.2
   fluttertoast: ^8.2.1
   image_picker: ^0.8.7
+  sentry_flutter: ^7.0.0
 #  git: ^2.2.0
 
 dev_dependencies:

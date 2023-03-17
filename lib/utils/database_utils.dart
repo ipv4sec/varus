@@ -17,7 +17,7 @@ class DatabaseUtils {
 
   void _createDb(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE t_varus (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, value TEXT, description TEXT)',
+      'CREATE TABLE t_varus (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, secret TEXT, description TEXT)',
     );
   }
 }

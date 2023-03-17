@@ -15,6 +15,14 @@ class AboutPage extends StatelessWidget {
   <p>Copyright © by YuYuai. All rights reserved.</p>
 </div>
       '''),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          Navigator.pushNamed(context, "/camera");
+        },
+        backgroundColor: Colors.teal,
+        icon: const Icon(Icons.home_work_outlined),
+        label: const Text("返回"),
+      ),
     );
   }
 }
