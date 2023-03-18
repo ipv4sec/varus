@@ -3,11 +3,11 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 import 'package:varus/page/about_page.dart';
 import 'package:varus/page/append_page.dart';
+import 'package:varus/page/camera_page.dart';
 import 'package:varus/page/debug_page.dart';
+import 'package:varus/page/feedback_page.dart';
 import 'package:varus/page/home_page.dart';
-import 'package:varus/page/scan_page.dart';
 
-import 'package:flutter/widgets.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
@@ -33,14 +33,15 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       theme: theme,
-      title: 'OTP',
+      title: 'VARUS OTP',
       initialRoute: "/",
       routes: {
         "/": (_) => HomePage(),
         "/debug": (_) => DebugPage(),
         "/about": (_) => AboutPage(),
-        "/camera": (_) => ScanPage(),
+        "/camera": (_) => CameraPage(),
         "/append": (_) => AppendPage(),
+        "/feedback": (_) => FeedBackPage(),
       },
     );
   }

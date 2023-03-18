@@ -4,14 +4,14 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:varus/widgets/customized_appbar.dart';
 
-class ScanPage extends StatefulWidget {
-  const ScanPage({Key? key}) : super(key: key);
+class CameraPage extends StatefulWidget {
+  const CameraPage({Key? key}) : super(key: key);
 
   @override
-  State<ScanPage> createState() => _ScanPageState();
+  State<CameraPage> createState() => _CameraPageState();
 }
 
-class _ScanPageState extends State<ScanPage> {
+class _CameraPageState extends State<CameraPage> {
   MobileScannerController? cameraController;
 
   @override
@@ -113,7 +113,6 @@ class _ScanPageState extends State<ScanPage> {
               // vs.add(varus);
               // _streamController.sink.add(vs);
               Navigator.pushNamed(context, "/append");
-              // Navigator.of(context).pushNamed();
             },
             backgroundColor: Colors.teal,
             icon: const Icon(Icons.add_card_sharp),

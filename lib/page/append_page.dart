@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:varus/dao/varus_dao.dart';
 import 'package:varus/service/varus_service.dart';
 import 'package:varus/utils/toast_utils.dart';
@@ -15,6 +14,10 @@ class AppendPage extends StatefulWidget {
 
 class _AppendPageState extends State<AppendPage> {
 
+  var _titleTextEditingController = TextEditingController();
+  var _secretTextEditingController = TextEditingController();
+  var _descriptionTextEditingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,44 +26,43 @@ class _AppendPageState extends State<AppendPage> {
         child: Column(
           children: [
             TextField(
+              controller: _titleTextEditingController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.read_more_sharp),
                 labelText: "title",
               ),
             ),
             TextField(
+              controller: _secretTextEditingController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.water_drop_outlined),
                 labelText: "secret",
               ),
             ),
             TextField(
+              controller: _descriptionTextEditingController,
               decoration: InputDecoration(
                 prefixIcon: Icon(Icons.add_chart_sharp),
                 labelText: "description",
               ),
             ),
-            // ElevatedButton(child: Text('扫描二维码'), onPressed: (){}),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
-          // VarusDao.instance.createVarus(Varus(name: "name", value: "value", description: "description"));
-          // var vs = await VarusService.instance.queryAllVarus();
-          // print(vs.toString());
           var varus =
-              Varus(name: "name", secret: "secret", description: "description");
-          // var id =
+              Varus(
+                  name: _titleTextEditingController.text,
+                  secret: _secretTextEditingController.text,
+                  description: _descriptionTextEditingController.text);
           await VarusService.instance.createVarus(varus);
-          // varus.id = id;
-          // vs.add(varus);
           toast("保存成功");
           Navigator.pushNamed(context, "/");
         },
         backgroundColor: Colors.teal,
-        icon: const Icon(Icons.save),
-        label: const Text("Store"),
+        icon: const Icon(Icons.save_alt_outlined),
+        label: const Text("保存条目"),
       ),
     );
   }

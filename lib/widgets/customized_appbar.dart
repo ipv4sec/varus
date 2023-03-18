@@ -7,7 +7,7 @@ class CustomizedAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: Text("OTP"),
+      title: Text("VARUS OTP"),
       elevation: 20,
     );
   }

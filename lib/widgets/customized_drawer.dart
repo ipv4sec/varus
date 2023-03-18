@@ -13,7 +13,7 @@ class CustomizedDrawer extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "OTP",
+                "VARUS OTP",
                 style: TextStyle(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     fontSize: 18.0),
@@ -30,25 +30,25 @@ class CustomizedDrawer extends StatelessWidget {
         ),
         decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       ),
-      // ListTile(
-      //   leading: Icon(Icons.settings),
-      //   title: Text('Settings'),
-      //   onTap: () {
-      //     Navigator.pushNamed(context, "/settings");
-      //   },
-      // ),
       ListTile(
         leading: Icon(Icons.adb_sharp),
-        title: Text('Debug'),
+        title: Text('调试'),
         onTap: () {
           Navigator.pushNamed(context, "/debug");
         },
       ),
       ListTile(
-        leading: Icon(Icons.dashboard),
-        title: Text('About'),
+        leading: Icon(Icons.info_rounded),
+        title: Text('关于'),
         onTap: () {
           Navigator.pushNamed(context, "/about");
+        },
+      ),
+      ListTile(
+        leading: Icon(Icons.messenger_sharp),
+        title: Text('反馈'),
+        onTap: () async {
+          Navigator.pushNamed(context, "/feedback");
         },
       ),
     ]));

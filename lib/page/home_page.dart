@@ -88,20 +88,10 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          // VarusDao.instance.createVarus(Varus(name: "name", value: "value", description: "description"));
-          // var vs = await VarusDao.instance.queryAllVarus();
-          // print(vs.toString());
-          // var varus =
-          //     Varus(name: "name", value: "value", description: "description");
-          // var id = await VarusService.instance.createVarus(varus);
-          // varus.id = id;
-          // vs.add(varus);
-          // _streamController.sink.add(vs);
           Navigator.pushNamed(context, "/camera");
-          // Navigator.of(context).pushNamed();
         },
         backgroundColor: Colors.teal,
-        icon: const Icon(Icons.add_box_sharp),
+        icon: const Icon(Icons.add),
         label: const Text("添加条目"),
       ),
     );
