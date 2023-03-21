@@ -13,7 +13,7 @@ class CustomizedDrawer extends StatelessWidget {
           child: Row(
             children: [
               Text(
-                "VARUS OTP",
+                "二步验证",
                 style: TextStyle(
                     color: Theme.of(context).scaffoldBackgroundColor,
                     fontSize: 18.0),

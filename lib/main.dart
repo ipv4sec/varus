@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       theme: theme,
-      title: 'VARUS OTP',
+      title: '二步验证',
       initialRoute: "/",
       routes: {
         "/": (_) => HomePage(),
