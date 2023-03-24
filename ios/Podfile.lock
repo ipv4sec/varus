@@ -70,13 +70,13 @@ PODS:
     - Flutter
   - PromisesObjC (2.2.0)
   - Protobuf (3.22.1)
-  - Sentry/HybridSDK (8.0.0):
-    - SentryPrivate (= 8.0.0)
+  - Sentry/HybridSDK (8.3.1):
+    - SentryPrivate (= 8.3.1)
   - sentry_flutter (0.0.1):
     - Flutter
     - FlutterMacOS
-    - Sentry/HybridSDK (= 8.0.0)
-  - SentryPrivate (8.0.0)
+    - Sentry/HybridSDK (= 8.3.1)
+  - SentryPrivate (8.3.1)
   - sqflite (0.0.2):
     - Flutter
     - FMDB (>= 2.7.5)
@@ -162,9 +162,9 @@ SPEC CHECKSUMS:
   package_info_plus: 6c92f08e1f853dc01228d6f553146438dafcd14e
   PromisesObjC: 09985d6d70fbe7878040aa746d78236e6946d2ef
   Protobuf: d7f7c8329edf5eb8af65547a8ba3e9c1cee927d5
-  Sentry: 2158a4621096dcd0a3a4f7c80b84b04dde261035
-  sentry_flutter: 30937beb4ee3b76576d02f77bb1fba47c812d16b
-  SentryPrivate: 1e3acf96ee818a8d0d95b8e922d39ab6be338ea0
+  Sentry: 316f997b2f89557014ae9919f0d0c71e6e43c01e
+  sentry_flutter: f0e51fac01e46af2e16f0a7458e3014bbc131ff5
+  SentryPrivate: 63dd9ee25187d20427ab7b5d03054df149912c23
   sqflite: 6d358c025f5b867b29ed92fc697fd34924e11904
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   video_player_avfoundation: 81e49bb3d9fb63dccf9fa0f6d877dc3ddbeac126
