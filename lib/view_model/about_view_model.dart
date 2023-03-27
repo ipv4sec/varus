@@ -14,5 +14,4 @@ void updateDescription(String description) {
 class AboutViewModel {
   String description;
   AboutViewModel({required this.description});
-
 }
