@@ -1,12 +1,13 @@
 name: build
-
 on:
   push:
     branches:
-      - master
-
+      master:
+        pull_request:
+          types: [closed]
 jobs:
   build:
+    if: github.event.pull_request.merged == true && ${{ github.ref == 'refs/heads/master' }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3

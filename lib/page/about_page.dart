@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:get/get.dart';
 
 import 'package:varus/widgets/customized_appbar.dart';
 
+import '../view_model/about_view_model.dart';
 
-class AboutPage extends StatefulWidget {
-  const AboutPage({Key? key}) : super(key: key);
 
-  @override
-  State<AboutPage> createState() => _AboutPageState();
-}
+class AboutPage extends StatelessWidget {
+   AboutPage({Key? key}) : super(key: key);
 
-class _AboutPageState extends State<AboutPage> {
+   var _viewModel = Get.put(AboutPageViewModel());
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomizedAppBar(),
-      body: Html(data: '''
-<div>
-  <p>Copyright © by YuYuai. All rights reserved.</p>
-</div>
-      '''),
+      appBar: CustomizedAppBar(),
+      body: Column(
+        children: [
+          Obx(() =>  Html(data: '${_viewModel.data.value.description}')),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton.extended(onPressed: () {
+        _viewModel.updateDescription("233");
+      }, label: Icon(Icons.add)),
     );
   }
 }
