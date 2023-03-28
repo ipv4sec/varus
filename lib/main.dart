@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = FlexThemeData.light(
         fontFamily: "Montserrat",
-        useMaterial3: false,
+        useMaterial3: true,
         scheme: FlexScheme.materialBaseline);
 
     return MaterialApp(
