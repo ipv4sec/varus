@@ -1,13 +1,13 @@
 name: build
+
 on:
   push:
     branches:
-      master:
-        pull_request:
-          types: [closed]
+      - master
+
 jobs:
   build:
-    if: github.event.pull_request.merged == true && ${{ github.ref == 'refs/heads/master' }}
+#    if: github.event.pull_request.merged == true && ${{ github.ref == 'refs/heads/master' }}
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,5 +22,10 @@ jobs:
       - run: flutter --version
       - run: flutter pub get
       - run: flutter build apk
-      - run: flutter build ios --release --no-codesign
+#      - run: flutter build ios --release --no-codesign
+      - name: Run script file
+        run: |
+         chmod +x .github/scripts/pgyer_upload.sh
+         .github/scripts/pgyer_upload.sh -k ${PGYER_APIKEY} build/app/outputs/flutter-apk/app-release.apk
+        shell: bash
 
