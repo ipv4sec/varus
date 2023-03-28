@@ -27,8 +27,8 @@ jobs:
         run: |
           # import keystore from secrets
           ls -all
-          echo $KEYSTORE_BASE64 | base64 -di > android/app/key.jks
-          echo $KEY_PROPERTIES | base64 -di > android/key.properties
+          echo $KEYSTORE_BASE64 | base64 -d -o android/app/key.jks
+          echo $KEY_PROPERTIES | base64 -d -o android/key.properties
       - run: flutter pub get
       - run: flutter build apk
 #      - run: flutter build ios --release --no-codesign
