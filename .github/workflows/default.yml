@@ -20,6 +20,15 @@ jobs:
           channel: 'stable'
           cache: true
       - run: flutter --version
+      - name: Create the Keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEY_PROPERTIES: ${{ secrets.KEY_PROPERTIES }}
+        run: |
+          # import keystore from secrets
+          ls -all
+          echo $KEYSTORE_BASE64 | base64 -di > android/app/key.jks
+          echo $KEY_PROPERTIES | base64 -di > android/key.properties
       - run: flutter pub get
       - run: flutter build apk
 #      - run: flutter build ios --release --no-codesign
@@ -29,7 +38,7 @@ jobs:
          .github/scripts/pgyer_upload.sh -k ${{ secrets.PGYER_APIKEY }} build/app/outputs/flutter-apk/app-release.apk
         shell: bash
       - name: WeChat Work notification by text
-        uses: chf007/action-wechat-work@master
+        uses: chf007/action-wechat-work@1.0.8
         env:
           WECHAT_WORK_BOT_WEBHOOK: ${{secrets.WECHATWORK_WEBHOOK}}
         with:
