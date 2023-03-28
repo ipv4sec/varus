@@ -28,4 +28,10 @@ jobs:
          chmod +x .github/scripts/pgyer_upload.sh
          .github/scripts/pgyer_upload.sh -k ${{ secrets.PGYER_APIKEY }} build/app/outputs/flutter-apk/app-release.apk
         shell: bash
+      - name: wechat-work robot message
+        uses: fifsky/wechat-work-action@v0.0.1
+        with:
+          url: ${{ secrets.WECHATWORK_WEBHOOK}}
+          type: text
+          content: updated
 
