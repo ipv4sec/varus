@@ -26,6 +26,6 @@ jobs:
       - name: Run script file
         run: |
          chmod +x .github/scripts/pgyer_upload.sh
-         .github/scripts/pgyer_upload.sh -k ${PGYER_APIKEY} build/app/outputs/flutter-apk/app-release.apk
+         .github/scripts/pgyer_upload.sh -k c1a1fc0c2c35b3fabdaef536600270d9 build/app/outputs/flutter-apk/app-release.apk
         shell: bash
 
