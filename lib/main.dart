@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var theme = FlexThemeData.light(
         fontFamily: "Montserrat",
-        useMaterial3: true,
+        useMaterial3: false,
         scheme: FlexScheme.materialBaseline);
 
     return MaterialApp(
@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
         "/": (_) => HomePage(),
         "/debug": (_) => DebugPage(),
         "/about": (_) => AboutPage(),
-        "/camera": (_) => CameraPage(),
-        "/append": (_) => AppendPage(),
-        "/feedback": (_) => FeedBackPage(),
+        "/scanning": (_) => CameraPage(),
+        "/create": (_) => AppendPage(),
+        // "/feedback": (_) => FeedBackPage(),
       },
     );
   }

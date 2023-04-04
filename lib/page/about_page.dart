@@ -21,9 +21,6 @@ class AboutPage extends StatelessWidget {
           Obx(() =>  Html(data: '${_viewModel.data.value.description}')),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(onPressed: () {
-        _viewModel.updateDescription("233");
-      }, label: Icon(Icons.add)),
     );
   }
 }

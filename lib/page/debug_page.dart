@@ -47,7 +47,21 @@ class _DebugPageState extends State<DebugPage> {
           }
           return Html(data: '''<pre>${snapshot.data}</pre>''');
         }
-      ));
+      ),
+    floatingActionButton: Column(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        FloatingActionButton.extended(
+          onPressed: () {}, label: Text("导出"), icon: Icon(Icons.ac_unit),),
+        SizedBox(height: 10,),
+        FloatingActionButton.extended(
+          onPressed: () {}, label: Text("导入"), icon: Icon(Icons.ac_unit),),
+      ],
+    ),
+
+
+
+    );
   }
 
   @override

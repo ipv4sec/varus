@@ -31,8 +31,8 @@ class CustomizedDrawer extends StatelessWidget {
         decoration: BoxDecoration(color: Theme.of(context).primaryColor),
       ),
       ListTile(
-        leading: Icon(Icons.adb_sharp),
-        title: Text('调试'),
+        leading: Icon(Icons.settings),
+        title: Text('设置'),
         onTap: () {
           Navigator.pushNamed(context, "/debug");
         },
@@ -43,14 +43,7 @@ class CustomizedDrawer extends StatelessWidget {
         onTap: () {
           Navigator.pushNamed(context, "/about");
         },
-      ),
-      ListTile(
-        leading: Icon(Icons.messenger_sharp),
-        title: Text('反馈'),
-        onTap: () async {
-          Navigator.pushNamed(context, "/feedback");
-        },
-      ),
+      )
     ]));
   }
 }
