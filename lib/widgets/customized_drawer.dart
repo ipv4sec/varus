@@ -34,7 +34,7 @@ class CustomizedDrawer extends StatelessWidget {
         leading: Icon(Icons.settings),
         title: Text('设置'),
         onTap: () {
-          Navigator.pushNamed(context, "/debug");
+          Navigator.pushNamed(context, "/settings");
         },
       ),
       ListTile(

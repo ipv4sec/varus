@@ -88,7 +88,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
-          Navigator.pushNamed(context, "/camera");
+          Navigator.pushNamed(context, "/scanning");
         },
         backgroundColor: Colors.teal,
         icon: const Icon(Icons.add),

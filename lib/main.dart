@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 import 'package:varus/page/about_page.dart';
-import 'package:varus/page/append_page.dart';
-import 'package:varus/page/camera_page.dart';
-import 'package:varus/page/debug_page.dart';
-import 'package:varus/page/feedback_page.dart';
+import 'package:varus/page/filling_page.dart';
 import 'package:varus/page/home_page.dart';
 
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:varus/page/scanning_page.dart';
+import 'package:varus/page/settings_page.dart';
 
 Future<void> main() async {
   await SentryFlutter.init(
@@ -37,11 +36,10 @@ class MyApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (_) => HomePage(),
-        "/debug": (_) => DebugPage(),
+        "/settings": (_) => SettingsPage(),
         "/about": (_) => AboutPage(),
-        "/scanning": (_) => CameraPage(),
-        "/create": (_) => AppendPage(),
-        // "/feedback": (_) => FeedBackPage(),
+        "/scanning": (_) => ScanningPage(),
+        "/filling": (_) => FillingPage(),
       },
     );
   }

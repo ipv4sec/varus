@@ -5,14 +5,14 @@ import 'package:varus/utils/toast_utils.dart';
 
 import 'package:varus/widgets/customized_appbar.dart';
 
-class AppendPage extends StatefulWidget {
-  const AppendPage({Key? key}) : super(key: key);
+class FillingPage extends StatefulWidget {
+  const FillingPage({Key? key}) : super(key: key);
 
   @override
-  State<AppendPage> createState() => _AppendPageState();
+  State<FillingPage> createState() => _FillingPageState();
 }
 
-class _AppendPageState extends State<AppendPage> {
+class _FillingPageState extends State<FillingPage> {
 
   var _titleTextEditingController = TextEditingController();
   var _secretTextEditingController = TextEditingController();
@@ -51,6 +51,12 @@ class _AppendPageState extends State<AppendPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () async {
+          if (_titleTextEditingController.text.length == 0 ||
+              _secretTextEditingController.text.length == 0 ||
+              _descriptionTextEditingController.text.length == 0) {
+            toast("保存成功");
+            return;
+          }
           var varus =
               Varus(
                   name: _titleTextEditingController.text,
