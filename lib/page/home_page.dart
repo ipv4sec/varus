@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import 'package:varus/dao/varus_dao.dart';
 import 'package:varus/service/varus_service.dart';
+import 'package:varus/page/filling_page.dart';
 import 'package:varus/utils/toast_utils.dart';
 import 'package:varus/utils/totp_utils.dart';
 
@@ -64,13 +65,17 @@ class _HomePageState extends State<HomePage> {
               final period = varus.effectivePeriod;
               final counter = _nowSeconds ~/ period;
               final remaining = period - (_nowSeconds % period);
+              final isHotp = varus.isHotp;
               final code = TotpUtils.generate(
                 secret: varus.secret,
                 period: period,
                 digits: varus.effectiveDigits,
                 algorithm: varus.effectiveAlgorithm,
-                counter: counter,
+                counter: isHotp ? varus.effectiveCounter : counter,
               );
+              final displayCode = code == null
+                  ? null
+                  : '${code.substring(0, code.length ~/ 2)} ${code.substring(code.length ~/ 2)}';
               return Theme(
                 data: Theme.of(context).copyWith(
                   splashFactory: InkSparkle.splashFactory,
@@ -85,28 +90,31 @@ class _HomePageState extends State<HomePage> {
                       trailing: code == null
                           ? const Text('无效密钥',
                               style: TextStyle(color: Colors.red))
-                          : Text(
-                              '${code.substring(0, code.length ~/ 2)} ${code.substring(code.length ~/ 2)}',
-                              style: const TextStyle(
-                                fontFamily: 'monospace',
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 1,
-                              ),
+                          : Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                Text(
+                                  displayCode!,
+                                  style: const TextStyle(
+                                    fontFamily: 'monospace',
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.bold,
+                                    letterSpacing: 1,
+                                  ),
+                                ),
+                                if (isHotp)
+                                  const Text(
+                                    'HOTP',
+                                    style: TextStyle(
+                                        fontSize: 10, color: Colors.grey),
+                                  ),
+                              ],
                             ),
-                      onTap: () async {
-                        await Future.delayed(
-                            const Duration(milliseconds: 300));
-                        if (code == null) {
-                          toast('密钥无效，无法生成验证码');
-                          return;
-                        }
-                        await Clipboard.setData(ClipboardData(text: code));
-                        toast('验证码已复制');
-                      },
-                      onLongPress: () => _confirmDelete(varus),
+                      onTap: () => _onEntryTap(varus, code),
+                      onLongPress: () => _showEntryMenu(varus),
                     ),
-                    if (code != null)
+                    if (!isHotp && code != null)
                       LinearProgressIndicator(
                         value: remaining / period,
                         minHeight: 3,
@@ -160,6 +168,70 @@ class _HomePageState extends State<HomePage> {
       hash = (hash * 31 + unit) % 0x7fffffff;
     }
     return Icon(_entryIcons[hash % _entryIcons.length], color: Colors.white);
+  }
+
+  Future<void> _onEntryTap(Varus varus, String? code) async {
+    await Future.delayed(const Duration(milliseconds: 300));
+    if (!mounted) {
+      return;
+    }
+    if (code == null) {
+      toast('密钥无效，无法生成验证码');
+      return;
+    }
+    var codeToCopy = code;
+    if (varus.isHotp) {
+      varus.counter = varus.effectiveCounter + 1;
+      await VarusService.instance.updateVarus(varus);
+      final nextCode = TotpUtils.generate(
+        secret: varus.secret,
+        digits: varus.effectiveDigits,
+        algorithm: varus.effectiveAlgorithm,
+        counter: varus.effectiveCounter,
+      );
+      if (nextCode != null) {
+        codeToCopy = nextCode;
+      }
+      vs = await VarusService.instance.queryAllVarus();
+      _streamController.sink.add(vs);
+    }
+    await Clipboard.setData(ClipboardData(text: codeToCopy));
+    toast('验证码已复制');
+  }
+
+  Future<void> _showEntryMenu(Varus varus) async {
+    final action = await showModalBottomSheet<String>(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.edit_outlined),
+              title: const Text('编辑条目'),
+              onTap: () => Navigator.pop(sheetContext, 'edit'),
+            ),
+            ListTile(
+              leading: const Icon(Icons.delete_outline, color: Colors.red),
+              title: const Text('删除条目',
+                  style: TextStyle(color: Colors.red)),
+              onTap: () => Navigator.pop(sheetContext, 'delete'),
+            ),
+          ],
+        ),
+      ),
+    );
+    if (!mounted) {
+      return;
+    }
+    if (action == 'edit') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => FillingPage(existing: varus)),
+      );
+    } else if (action == 'delete') {
+      await _confirmDelete(varus);
+    }
   }
 
   Future<void> _confirmDelete(Varus varus) async {

@@ -150,6 +150,8 @@ class _ScanningPageState extends State<ScanningPage> {
           initialPeriod: parsed.period,
           initialDigits: parsed.digits,
           initialAlgorithm: parsed.algorithm,
+          initialType: parsed.type,
+          initialCounter: parsed.counter,
         ),
       ),
     );
@@ -162,6 +164,8 @@ class _ScanningPageState extends State<ScanningPage> {
     int period,
     int digits,
     String algorithm,
+    String type,
+    int counter,
   }) _parseOtpAuth(String rawValue) {
     final uri = Uri.tryParse(rawValue);
     if (uri == null || !uri.isScheme('otpauth') || uri.path.length < 2) {
@@ -172,6 +176,8 @@ class _ScanningPageState extends State<ScanningPage> {
         period: 30,
         digits: 6,
         algorithm: 'SHA1',
+        type: 'totp',
+        counter: 0,
       );
     }
     final label = Uri.decodeFull(uri.path.substring(1));
@@ -187,6 +193,9 @@ class _ScanningPageState extends State<ScanningPage> {
     final digits = int.tryParse(uri.queryParameters['digits'] ?? '') ?? 6;
     final algorithm =
         (uri.queryParameters['algorithm'] ?? 'SHA1').toUpperCase();
+    final type = uri.host.toLowerCase() == 'hotp' ? 'hotp' : 'totp';
+    final counter =
+        int.tryParse(uri.queryParameters['counter'] ?? '') ?? 0;
     return (
       title: title,
       secret: uri.queryParameters['secret'] ?? '',
@@ -194,6 +203,8 @@ class _ScanningPageState extends State<ScanningPage> {
       period: period,
       digits: digits,
       algorithm: algorithm,
+      type: type,
+      counter: counter,
     );
   }
 
