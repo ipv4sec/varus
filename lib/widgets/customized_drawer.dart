@@ -11,6 +11,7 @@ class CustomizedDrawer extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(top: 100.0),
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text(
                 "二步验证",
@@ -22,7 +23,7 @@ class CustomizedDrawer extends StatelessWidget {
                 width: 10.0,
               ),
               Text(
-                "v0.1.0",
+                "v1.2.0",
                 style: TextStyle(color: Colors.white),
               ),
             ],
@@ -33,14 +34,18 @@ class CustomizedDrawer extends StatelessWidget {
       ListTile(
         leading: Icon(Icons.settings),
         title: Text('设置'),
-        onTap: () {
+        onTap: () async {
+          await Future.delayed(const Duration(milliseconds: 300));
+          if (!context.mounted) return;
           Navigator.pushNamed(context, "/settings");
         },
       ),
       ListTile(
         leading: Icon(Icons.info_rounded),
         title: Text('关于'),
-        onTap: () {
+        onTap: () async {
+          await Future.delayed(const Duration(milliseconds: 300));
+          if (!context.mounted) return;
           Navigator.pushNamed(context, "/about");
         },
       )

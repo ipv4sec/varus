@@ -71,50 +71,49 @@ class _HomePageState extends State<HomePage> {
                 algorithm: varus.effectiveAlgorithm,
                 counter: counter,
               );
-              return ListTile(
-                leading: CircleAvatar(
-                    child: Icon(
-                  Icons.account_tree,
-                  color: Colors.white,
-                )),
-                title: Text("Name: ${varus.name}"),
-                subtitle: Text("Description: ${varus.description}"),
-                trailing: code == null
-                    ? const Text('无效密钥',
-                        style: TextStyle(color: Colors.red))
-                    : Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '${code.substring(0, code.length ~/ 2)} ${code.substring(code.length ~/ 2)}',
-                            style: const TextStyle(
-                              fontFamily: 'monospace',
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  splashFactory: InkSparkle.splashFactory,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ListTile(
+                      leading: CircleAvatar(child: _iconFor(varus)),
+                      title: Text(varus.name),
+                      subtitle: Text(varus.description),
+                      trailing: code == null
+                          ? const Text('无效密钥',
+                              style: TextStyle(color: Colors.red))
+                          : Text(
+                              '${code.substring(0, code.length ~/ 2)} ${code.substring(code.length ~/ 2)}',
+                              style: const TextStyle(
+                                fontFamily: 'monospace',
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          SizedBox(
-                            width: 96,
-                            child: LinearProgressIndicator(
-                              value: remaining / period,
-                              minHeight: 3,
-                              backgroundColor: Colors.black12,
-                            ),
-                          ),
-                        ],
+                      onTap: () async {
+                        await Future.delayed(
+                            const Duration(milliseconds: 300));
+                        if (code == null) {
+                          toast('密钥无效，无法生成验证码');
+                          return;
+                        }
+                        await Clipboard.setData(ClipboardData(text: code));
+                        toast('验证码已复制');
+                      },
+                      onLongPress: () => _confirmDelete(varus),
+                    ),
+                    if (code != null)
+                      LinearProgressIndicator(
+                        value: remaining / period,
+                        minHeight: 3,
+                        backgroundColor: Colors.black12,
                       ),
-                onTap: () async {
-                  if (code == null) {
-                    toast('密钥无效，无法生成验证码');
-                    return;
-                  }
-                  await Clipboard.setData(ClipboardData(text: code));
-                  toast('验证码已复制');
-                },
-                onLongPress: () => _confirmDelete(varus),
+                  ],
+                ),
               );
             },
           );
@@ -129,6 +128,38 @@ class _HomePageState extends State<HomePage> {
         label: const Text("添加条目"),
       ),
     );
+  }
+
+  static const List<IconData> _entryIcons = [
+    Icons.security,
+    Icons.shield,
+    Icons.key,
+    Icons.vpn_key,
+    Icons.lock,
+    Icons.lock_outline,
+    Icons.fingerprint,
+    Icons.verified_user,
+    Icons.account_circle,
+    Icons.account_balance,
+    Icons.alternate_email,
+    Icons.email,
+    Icons.smartphone,
+    Icons.laptop,
+    Icons.public,
+    Icons.badge,
+    Icons.credit_card,
+    Icons.cloud,
+    Icons.star,
+    Icons.favorite,
+  ];
+
+  Icon _iconFor(Varus varus) {
+    final key = '${varus.id ?? 0}|${varus.name}';
+    var hash = 0;
+    for (final unit in key.codeUnits) {
+      hash = (hash * 31 + unit) % 0x7fffffff;
+    }
+    return Icon(_entryIcons[hash % _entryIcons.length], color: Colors.white);
   }
 
   Future<void> _confirmDelete(Varus varus) async {

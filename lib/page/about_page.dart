@@ -6,13 +6,43 @@ import 'package:varus/widgets/customized_appbar.dart';
 class AboutPage extends StatelessWidget {
    AboutPage({Key? key}) : super(key: key);
 
+  Widget _agreementLink(BuildContext context, String title) {
+    return InkWell(
+      onTap: () => _showAgreementDialog(context, title),
+      child: Text(
+        title,
+        style: const TextStyle(
+          color: Colors.blue,
+          decoration: TextDecoration.underline,
+        ),
+      ),
+    );
+  }
+
+  void _showAgreementDialog(BuildContext context, String title) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: Text(title),
+        content: const Text('TODO: 协议内容'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('关闭'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomizedAppBar(),
-      body: Column(
-        children: [
-          Html(data: '''
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Html(data: '''
 <article>
     
     <h3>The MIT License (MIT)</h3>
@@ -36,8 +66,20 @@ class AboutPage extends StatelessWidget {
       LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
       OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
       THE SOFTWARE.</p>
-</article> ''')
-        ],
+</article> '''),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _agreementLink(context, '隐私协议'),
+                  const SizedBox(width: 32),
+                  _agreementLink(context, '用户协议'),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
