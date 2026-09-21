@@ -16,10 +16,10 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.1.0+233
+version: 1.2.0+234
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -31,24 +31,15 @@ dependencies:
   flutter:
     sdk: flutter
 
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  sqflite: ^2.2.5
-  flutter_html: ^2.2.1
-  mobile_scanner: 3.0.0-beta.4
-  flex_color_scheme: ^6.1.2
-  fluttertoast: ^8.2.1
-  image_picker: ^0.8.7
-  sentry_flutter: ^7.0.0
-  get: ^4.6.5
-  flutter_launcher_icons: ^0.11.0
-  file_picker: ^5.2.7
-  path_provider: ^2.0.14
-#  url_launcher: ^6.1.10
-#  flutter_custom_license_page: ^0.0.3
-#  git: ^2.2.0
+  cupertino_icons: ^1.0.8
+  sqflite: ^2.4.0
+  flutter_html: ^3.0.0
+  mobile_scanner: ^6.0.11
+  flex_color_scheme: ^8.1.1
+  fluttertoast: ^8.2.10
+  image_picker: ^1.1.2
+  sentry_flutter: ^8.14.2
+  path_provider: ^2.1.5
 
 flutter_icons:
   android: "launcher_icon"
@@ -60,12 +51,14 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_launcher_icons: ^0.14.3
+
+  flutter_lints: ^5.0.0
+
+dependency_overrides:
+  # flutter_html 3.0.0 引用了 package:html 的内部 API（src/query_selector.dart 的顶层 matches），
+  # html 0.15.5+ 重构移除了它，需固定在旧版直到 flutter_html 更新
+  html: 0.15.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
