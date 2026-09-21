@@ -12,12 +12,21 @@ class DatabaseUtils {
 
   Future<Database> _init() async {
     String dbPath = '${await getDatabasesPath()}/varus.sqlite';
-    return await openDatabase(dbPath, version: 1, onCreate: _createDb);
+    return await openDatabase(dbPath, version: 2,
+        onCreate: _createDb, onUpgrade: _onUpgrade);
   }
 
-  void _createDb(Database db, int version) async {
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute('ALTER TABLE t_varus ADD COLUMN period INTEGER DEFAULT 30');
+      await db.execute('ALTER TABLE t_varus ADD COLUMN digits INTEGER DEFAULT 6');
+      await db.execute("ALTER TABLE t_varus ADD COLUMN algorithm TEXT DEFAULT 'SHA1'");
+    }
+  }
+
+  Future<void> _createDb(Database db, int version) async {
     await db.execute(
-      'CREATE TABLE t_varus (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, secret TEXT, description TEXT)',
+      'CREATE TABLE t_varus (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, secret TEXT, description TEXT, period INTEGER DEFAULT 30, digits INTEGER DEFAULT 6, algorithm TEXT DEFAULT \'SHA1\')',
     );
   }
 }

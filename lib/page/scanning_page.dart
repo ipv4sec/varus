@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 
+import 'package:varus/page/filling_page.dart';
+import 'package:varus/utils/toast_utils.dart';
 import 'package:varus/widgets/customized_appbar.dart';
 
 class ScanningPage extends StatefulWidget {
@@ -13,6 +15,7 @@ class ScanningPage extends StatefulWidget {
 
 class _ScanningPageState extends State<ScanningPage> {
   MobileScannerController? cameraController;
+  bool _navigated = false;
 
   @override
   void initState() {
@@ -64,19 +67,19 @@ class _ScanningPageState extends State<ScanningPage> {
       // ),
         appBar: CustomizedAppBar(),
       body: MobileScanner(
-        // fit: BoxFit.contain,
         controller: cameraController,
-        // onScannerStarted: ,
         onDetect: (capture) {
-          final List<Barcode> barcodes = capture.barcodes;
-          // final Uint8List? image = capture.image;
-          for (final barcode in barcodes) {
-            debugPrint('Barcode found! ${barcode.rawValue}');
-            // break;
-            cameraController!.stop();
+          if (_navigated) {
+            return;
           }
-          // Navigator.pushNamed(context, "/");
-
+          final List<Barcode> barcodes = capture.barcodes;
+          if (barcodes.isEmpty || barcodes.first.rawValue == null) {
+            return;
+          }
+          _navigated = true;
+          debugPrint('Barcode found! ${barcodes.first.rawValue}');
+          cameraController?.stop();
+          _openFilling(barcodes.first.rawValue!);
         },
       ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -87,11 +90,24 @@ class _ScanningPageState extends State<ScanningPage> {
             heroTag: "1",
             onPressed: () async {
               final ImagePicker _picker = ImagePicker();
-              // Pick an image
               final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-              print(image);
-              Navigator.pushNamed(context, "/append");
-              // Navigator.of(context).pushNamed();
+              if (image == null) {
+                return;
+              }
+              try {
+                final capture = await cameraController?.analyzeImage(image.path);
+                final rawValue = (capture?.barcodes.isNotEmpty ?? false)
+                    ? capture!.barcodes.first.rawValue
+                    : null;
+                if (rawValue == null) {
+                  toast("未识别到二维码");
+                  return;
+                }
+                _openFilling(rawValue);
+              } catch (e) {
+                debugPrint('analyzeImage error: $e');
+                toast("识别失败");
+              }
             },
             backgroundColor: Colors.teal,
             icon: const Icon(Icons.photo_library_outlined),
@@ -122,9 +138,68 @@ class _ScanningPageState extends State<ScanningPage> {
     ),
     );
   }
+  void _openFilling(String rawValue) {
+    final parsed = _parseOtpAuth(rawValue);
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FillingPage(
+          initialTitle: parsed.title,
+          initialSecret: parsed.secret,
+          initialDescription: parsed.description,
+          initialPeriod: parsed.period,
+          initialDigits: parsed.digits,
+          initialAlgorithm: parsed.algorithm,
+        ),
+      ),
+    );
+  }
+
+  ({
+    String title,
+    String secret,
+    String description,
+    int period,
+    int digits,
+    String algorithm,
+  }) _parseOtpAuth(String rawValue) {
+    final uri = Uri.tryParse(rawValue);
+    if (uri == null || !uri.isScheme('otpauth') || uri.path.length < 2) {
+      return (
+        title: rawValue,
+        secret: '',
+        description: '',
+        period: 30,
+        digits: 6,
+        algorithm: 'SHA1',
+      );
+    }
+    final label = Uri.decodeFull(uri.path.substring(1));
+    final issuer = uri.queryParameters['issuer'];
+    var title = label;
+    var description = issuer ?? '';
+    final colon = label.indexOf(':');
+    if (colon != -1) {
+      title = label.substring(colon + 1).trim();
+      description = issuer ?? label.substring(0, colon).trim();
+    }
+    final period = int.tryParse(uri.queryParameters['period'] ?? '') ?? 30;
+    final digits = int.tryParse(uri.queryParameters['digits'] ?? '') ?? 6;
+    final algorithm =
+        (uri.queryParameters['algorithm'] ?? 'SHA1').toUpperCase();
+    return (
+      title: title,
+      secret: uri.queryParameters['secret'] ?? '',
+      description: description,
+      period: period,
+      digits: digits,
+      algorithm: algorithm,
+    );
+  }
+
   @override
   void dispose() {
-    cameraController?.stop();
+    cameraController?.dispose();
     super.dispose();
   }
 }

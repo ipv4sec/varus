@@ -5,8 +5,25 @@ class Varus {
   String name;
   String secret;
   String description;
+  int? period;
+  int? digits;
+  String? algorithm;
 
-  Varus({this.id, required this.name, required this.secret, required this.description});
+  Varus({
+    this.id,
+    required this.name,
+    required this.secret,
+    required this.description,
+    this.period,
+    this.digits,
+    this.algorithm,
+  });
+
+  int get effectivePeriod => period ?? 30;
+
+  int get effectiveDigits => digits ?? 6;
+
+  String get effectiveAlgorithm => algorithm ?? 'SHA1';
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,14 +31,21 @@ class Varus {
       'name': name,
       'secret': secret,
       'description': description,
+      'period': effectivePeriod,
+      'digits': effectiveDigits,
+      'algorithm': effectiveAlgorithm,
     };
   }
+
   static Varus fromMap(Map<String, dynamic> map) {
     return Varus(
       id: map['id'],
       name: map['name'],
       secret: map['secret'],
       description: map['description'],
+      period: map['period'],
+      digits: map['digits'],
+      algorithm: map['algorithm'],
     );
   }
 }

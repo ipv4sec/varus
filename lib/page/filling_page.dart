@@ -6,7 +6,22 @@ import 'package:varus/utils/toast_utils.dart';
 import 'package:varus/widgets/customized_appbar.dart';
 
 class FillingPage extends StatefulWidget {
-  const FillingPage({Key? key}) : super(key: key);
+  const FillingPage({
+    Key? key,
+    this.initialTitle,
+    this.initialSecret,
+    this.initialDescription,
+    this.initialPeriod,
+    this.initialDigits,
+    this.initialAlgorithm,
+  }) : super(key: key);
+
+  final String? initialTitle;
+  final String? initialSecret;
+  final String? initialDescription;
+  final int? initialPeriod;
+  final int? initialDigits;
+  final String? initialAlgorithm;
 
   @override
   State<FillingPage> createState() => _FillingPageState();
@@ -17,6 +32,14 @@ class _FillingPageState extends State<FillingPage> {
   var _titleTextEditingController = TextEditingController();
   var _secretTextEditingController = TextEditingController();
   var _descriptionTextEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _titleTextEditingController.text = widget.initialTitle ?? '';
+    _secretTextEditingController.text = widget.initialSecret ?? '';
+    _descriptionTextEditingController.text = widget.initialDescription ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +80,16 @@ class _FillingPageState extends State<FillingPage> {
             toast("保存成功");
             return;
           }
-          var varus =
-              Varus(
-                  name: _titleTextEditingController.text,
-                  secret: _secretTextEditingController.text,
-                  description: _descriptionTextEditingController.text);
+          var varus = Varus(
+              name: _titleTextEditingController.text,
+              secret: _secretTextEditingController.text,
+              description: _descriptionTextEditingController.text,
+              period: widget.initialPeriod,
+              digits: widget.initialDigits,
+              algorithm: widget.initialAlgorithm);
           await VarusService.instance.createVarus(varus);
           toast("保存成功");
-          Navigator.pushNamed(context, "/");
+          Navigator.pushReplacementNamed(context, "/");
         },
         backgroundColor: Colors.teal,
         icon: const Icon(Icons.save_alt_outlined),
