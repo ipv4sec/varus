@@ -115,7 +115,7 @@ class _FillingPageState extends State<FillingPage> {
           toast("保存成功");
           Navigator.pushReplacementNamed(context, "/");
         },
-        backgroundColor: Colors.teal,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         icon: const Icon(Icons.save_alt_outlined),
         label: Text(widget.existing != null ? "保存修改" : "保存条目"),
       ),

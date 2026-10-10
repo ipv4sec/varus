@@ -4,12 +4,14 @@ import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:varus/dao/varus_dao.dart';
 import 'package:varus/service/varus_service.dart';
 import 'package:varus/utils/secret_crypto.dart';
+import 'package:varus/utils/theme_controller.dart';
 import 'package:varus/utils/toast_utils.dart';
 import 'package:varus/widgets/customized_appbar.dart';
 
@@ -31,6 +33,7 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     _init();
+    ThemeController.instance.addListener(_onThemeChanged);
     SharedPreferences.getInstance().then((prefs) {
       if (!mounted) {
         return;
@@ -39,6 +42,12 @@ class _SettingsPageState extends State<SettingsPage> {
         _lockEnabled = prefs.getBool(_lockKey) ?? true;
       });
     });
+  }
+
+  void _onThemeChanged() {
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   Future<void> _init() async {
@@ -205,6 +214,20 @@ class _SettingsPageState extends State<SettingsPage> {
                   });
                 },
               ),
+              ListTile(
+                leading: const Icon(Icons.brightness_6_outlined),
+                title: const Text("外观模式"),
+                subtitle: Text(_modeLabel(ThemeController.instance.mode)),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: _showModeSheet,
+              ),
+              ListTile(
+                leading: const Icon(Icons.palette_outlined),
+                title: const Text("主题配色"),
+                subtitle: Text(ThemeController.instance.scheme.name),
+                trailing: const Icon(Icons.chevron_right),
+                onTap: _showSchemeDialog,
+              ),
               if (snapshot.data != null)
                 Html(data: '<pre>${snapshot.data}</pre>'),
             ],
@@ -234,8 +257,99 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  String _modeLabel(ThemeMode mode) {
+    switch (mode) {
+      case ThemeMode.system:
+        return "跟随系统";
+      case ThemeMode.light:
+        return "浅色";
+      case ThemeMode.dark:
+        return "深色";
+    }
+  }
+
+  Future<void> _showModeSheet() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (sheetContext) => SafeArea(
+        child: RadioGroup<ThemeMode>(
+          groupValue: ThemeController.instance.mode,
+          onChanged: (mode) {
+            if (mode != null) {
+              ThemeController.instance.setMode(mode);
+            }
+            Navigator.pop(sheetContext);
+          },
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final mode in ThemeMode.values)
+                RadioListTile<ThemeMode>(
+                  value: mode,
+                  title: Text(_modeLabel(mode)),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _showSchemeDialog() async {
+    final controller = ThemeController.instance;
+    await showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text("主题配色"),
+        content: SizedBox(
+          width: double.maxFinite,
+          child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: controller.schemes.length,
+            itemBuilder: (context, index) {
+              final scheme = controller.schemes[index];
+              final selected = scheme.name == controller.scheme.name;
+              return ListTile(
+                dense: true,
+                title: Text(scheme.name),
+                subtitle: _schemeDots(scheme),
+                trailing:
+                    selected ? const Icon(Icons.check) : null,
+                onTap: () {
+                  controller.setScheme(scheme);
+                  Navigator.pop(dialogContext);
+                },
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _schemeDots(FlexSchemeData scheme) {
+    final colors = [
+      scheme.light.primary,
+      scheme.light.primaryContainer,
+      scheme.light.secondary,
+      scheme.light.secondaryContainer,
+    ];
+    return Row(
+      children: [
+        for (final color in colors)
+          Container(
+            width: 14,
+            height: 14,
+            margin: const EdgeInsets.only(right: 4),
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+      ],
+    );
+  }
+
   @override
   void dispose() {
+    ThemeController.instance.removeListener(_onThemeChanged);
     _stream.close();
     super.dispose();
   }

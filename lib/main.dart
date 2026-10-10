@@ -1,4 +1,3 @@
-import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,6 +9,7 @@ import 'package:varus/page/home_page.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:varus/page/scanning_page.dart';
 import 'package:varus/page/settings_page.dart';
+import 'package:varus/utils/theme_controller.dart';
 
 Future<void> main() async {
   await SentryFlutter.init(
@@ -149,30 +149,43 @@ class _LockGateState extends State<LockGate> with WidgetsBindingObserver {
     if (!_locked) {
       return widget.child;
     }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        backgroundColor: Colors.teal,
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.lock_outline, size: 64, color: Colors.white),
-              const SizedBox(height: 16),
-              const Text(
-                '二步验证已锁定',
-                style: TextStyle(color: Colors.white, fontSize: 18),
+    return ListenableBuilder(
+      listenable: ThemeController.instance,
+      builder: (context, _) {
+        final controller = ThemeController.instance;
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: controller.theme,
+          darkTheme: controller.darkTheme,
+          themeMode: controller.mode,
+          home: Builder(
+            builder: (context) => Scaffold(
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              body: Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(Icons.lock_outline, size: 64, color: Colors.white),
+                    const SizedBox(height: 16),
+                    Text(
+                      '二步验证已锁定',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 18),
+                    ),
+                    const SizedBox(height: 32),
+                    ElevatedButton.icon(
+                      onPressed: _tryAuthenticate,
+                      icon: const Icon(Icons.fingerprint),
+                      label: const Text('点击解锁'),
+                    ),
+                  ],
+                ),
               ),
-              const SizedBox(height: 32),
-              ElevatedButton.icon(
-                onPressed: _tryAuthenticate,
-                icon: const Icon(Icons.fingerprint),
-                label: const Text('点击解锁'),
-              ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }
@@ -182,21 +195,24 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var theme = FlexThemeData.light(
-        fontFamily: "Montserrat",
-        useMaterial3: false,
-        scheme: FlexScheme.materialBaseline);
-
-    return MaterialApp(
-      theme: theme,
-      title: '二步验证',
-      initialRoute: "/",
-      routes: {
-        "/": (_) => HomePage(),
-        "/settings": (_) => SettingsPage(),
-        "/about": (_) => AboutPage(),
-        "/scanning": (_) => ScanningPage(),
-        "/filling": (_) => FillingPage(),
+    return ListenableBuilder(
+      listenable: ThemeController.instance,
+      builder: (context, _) {
+        final controller = ThemeController.instance;
+        return MaterialApp(
+          theme: controller.theme,
+          darkTheme: controller.darkTheme,
+          themeMode: controller.mode,
+          title: '二步验证',
+          initialRoute: "/",
+          routes: {
+            "/": (_) => HomePage(),
+            "/settings": (_) => SettingsPage(),
+            "/about": (_) => AboutPage(),
+            "/scanning": (_) => ScanningPage(),
+            "/filling": (_) => FillingPage(),
+          },
+        );
       },
     );
   }

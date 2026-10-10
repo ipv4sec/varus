@@ -109,7 +109,7 @@ class _ScanningPageState extends State<ScanningPage> {
                 toast("识别失败");
               }
             },
-            backgroundColor: Colors.teal,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.photo_library_outlined),
             label: const Text("图库图片"),
           ),
@@ -130,7 +130,7 @@ class _ScanningPageState extends State<ScanningPage> {
               // _streamController.sink.add(vs);
               Navigator.pushNamed(context, "/filling");
             },
-            backgroundColor: Colors.teal,
+            backgroundColor: Theme.of(context).colorScheme.primary,
             icon: const Icon(Icons.add_card_sharp),
             label: const Text("手动添加"),
           )

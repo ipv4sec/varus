@@ -58,7 +58,6 @@ class _HomePageState extends State<HomePage> {
             itemCount: snapshot.data!.length,
             separatorBuilder: (BuildContext context, int index) => Divider(
               height: 0.1,
-              color: Color(0xFFF9FBE7),
             ),
             itemBuilder: (BuildContext context, int index) {
               final varus = snapshot.data![index];
@@ -88,8 +87,11 @@ class _HomePageState extends State<HomePage> {
                       title: Text(varus.name),
                       subtitle: Text(varus.description),
                       trailing: code == null
-                          ? const Text('无效密钥',
-                              style: TextStyle(color: Colors.red))
+                          ? Text('无效密钥',
+                              style: TextStyle(
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .error))
                           : Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.end,
@@ -118,7 +120,8 @@ class _HomePageState extends State<HomePage> {
                       LinearProgressIndicator(
                         value: remaining / period,
                         minHeight: 3,
-                        backgroundColor: Colors.black12,
+                        backgroundColor:
+                            Theme.of(context).colorScheme.surfaceContainerHighest,
                       ),
                   ],
                 ),
@@ -131,7 +134,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.pushNamed(context, "/scanning");
         },
-        backgroundColor: Colors.teal,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         icon: const Icon(Icons.add),
         label: const Text("添加条目"),
       ),
@@ -212,9 +215,11 @@ class _HomePageState extends State<HomePage> {
               onTap: () => Navigator.pop(sheetContext, 'edit'),
             ),
             ListTile(
-              leading: const Icon(Icons.delete_outline, color: Colors.red),
-              title: const Text('删除条目',
-                  style: TextStyle(color: Colors.red)),
+              leading: Icon(Icons.delete_outline,
+                  color: Theme.of(context).colorScheme.error),
+              title: Text('删除条目',
+                  style: TextStyle(
+                      color: Theme.of(context).colorScheme.error)),
               onTap: () => Navigator.pop(sheetContext, 'delete'),
             ),
           ],
@@ -247,7 +252,8 @@ class _HomePageState extends State<HomePage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('删除', style: TextStyle(color: Colors.red)),
+            child: Text('删除',
+                style: TextStyle(color: Theme.of(context).colorScheme.error)),
           ),
         ],
       ),

@@ -16,7 +16,7 @@ class CustomizedDrawer extends StatelessWidget {
               Text(
                 "二步验证",
                 style: TextStyle(
-                    color: Theme.of(context).scaffoldBackgroundColor,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontSize: 18.0),
               ),
               SizedBox(
@@ -24,7 +24,8 @@ class CustomizedDrawer extends StatelessWidget {
               ),
               Text(
                 "v1.2.0",
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.onPrimary),
               ),
             ],
           ),
